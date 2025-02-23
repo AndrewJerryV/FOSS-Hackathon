@@ -4,6 +4,13 @@
 🚀 **Built for the Fosshub Hackathon** | 🔗 [Live Demo on GitHub Pages](https://andrewjerryv.github.io/FOSS-Hackathon/)  
 
 **PeerChat** is a real-time **peer-to-peer (P2P) communication platform** that allows users to chat, share files, and make **encrypted video calls** without relying on centralized servers. Built using **WebRTC** and **PeerJS**, PeerChat ensures **private and secure** conversations between users.
+
+---
+
+## 📺 Demo Video  
+Watch the PeerChat demo on YouTube:  
+[![Watch the video](https://youtube.com/shorts/EtOrvE_Mde8?feature=share)
+
 ---
 
 ## 🚀 Features
