@@ -287,7 +287,7 @@ function sendFile() {
         const link = document.createElement("a");
         link.href = fileData;
         link.download = file.name;
-        link.textContent = "Download " + file.name;
+        link.textContent = file.name;
         appendChatElement(link, "sent");
       }
     } else {
@@ -456,6 +456,7 @@ function hideScreenShareButtonIfMobile() {
     chatDiv.style.height = "70vh"; // Make chat cover full height on mobile
     chatDiv.style.width = "100%";
     document.body.style.fontSize = "37px"; // Increase base font size
+    document.querySelector("h1, h2, h3").style.fontSize = "40px"; // Larger font for header
     console.log("Screen sharing disabled on mobile devices.");
   }
   else {
