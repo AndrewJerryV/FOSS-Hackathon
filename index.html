@@ -2,12 +2,14 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>P2P WhatsApp Clone Demo</title>
+  <title>PeerChat</title>
+  <link rel="icon" type="image/x-icon" href="/images/icon.ico">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div id="Top">
-    <h1>P2P WhatsApp Clone Demo</h1>
+    <p class="by-text">By <a href="mailto:vayalilandrew@gmail.com" style="text-decoration: none; color: inherit; font-weight: bold;">Andrew</a>, <a href="mailto:@gmail.com" style="text-decoration: none; color: inherit; font-weight: bold;">Sabari</a></p>
+    <h1>PeerChat</h1>
     <p>Room ID: <span id="room-id"></span></p>
     <button id="disconnectButton">Disconnect</button>
   </div>
@@ -21,14 +23,13 @@
   </div>
   
   <div id="video-container">
-    <video id="remoteVideo" autoplay playsinline></video>
-    <video id="localVideo" autoplay muted playsinline></video>
+    <video id="remoteVideo" autoplay playsinline style="display: none;"></video>
+    <video id="localVideo" autoplay muted playsinline style="display: none;"></video>
   </div>
   <div id="call-buttons">
     <button id="startCallButton">📞 Start Video</button>
     <button id="endCallButton" style="display: none;">❌ End Call</button>
   </div>
-
   <div id="Video-buttons">
   <button id="shareScreenButton">Share Screen</button>
   <button id="endScreenShareButton" style="display: none;">End Screen Share</button>
