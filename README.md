@@ -9,7 +9,7 @@
 
 ## 📺 Demo Video  
 Watch the PeerChat demo on YouTube:  
-![Watch the video](https://youtube.com/shorts/EtOrvE_Mde8?feature=share)
+[Watch the video](https://youtube.com/shorts/EtOrvE_Mde8?feature=share)
 
 ---
 
