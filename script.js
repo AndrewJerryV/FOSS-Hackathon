@@ -71,6 +71,9 @@ function endScreenShare() {
       currentCall = null;
     }
     // Reset the video element and flag.
+    if (conn && conn.open) {
+      conn.send({ type: "call-ended" }); // Notify the other peer
+    }
     document.getElementById("localVideo").srcObject = null;
     document.getElementById("shareScreenButton").style.display = "block"; // Show End Call button
     document.getElementById("endScreenShareButton").style.display = "none"; // Hide Start Call button
@@ -155,7 +158,6 @@ function initHost() {
     }
   });
 }
-
 // Guest initialization.
 function initGuest() {
   const guestId = room + '-guest';
@@ -176,12 +178,13 @@ function initGuest() {
 function handleIncomingCallAsHost(call) {
   if (call.metadata && call.metadata.isScreenShare) {
     call.answer(); // Answer screen share calls without camera access.
-    setupCall(call, true);
+    setupCall(call);
     adjustShareLayout(true);
   } else {
     // Answer without acquiring local media so that the guest's camera remains off.
     call.answer();
-    setupCall(call, false);
+    setupCall(call);
+    adjustVideoLayout(true);
   }
   document.getElementById("remoteVideo").style.display = "block"; // Show End Call button
 }
@@ -190,12 +193,13 @@ function handleIncomingCallAsHost(call) {
 function handleIncomingCallAsGuest(call) {
   if (call.metadata && call.metadata.isScreenShare) {
     call.answer(); // Answer screen share calls without camera access.
-    setupCall(call, true);
+    setupCall(call);
     adjustShareLayout(true);
   } else {
     // Answer without acquiring local media so that the guest's camera remains off.
     call.answer();
-    setupCall(call, false);
+    setupCall(call);
+    adjustVideoLayout(true);
   }
   document.getElementById("remoteVideo").style.display = "block"; // Show End Call button
 }
@@ -225,11 +229,22 @@ function setupConnection() {
         img.classList.add("received-file");
         appendChatElement(img, "received");
       } else {
+        const container = document.createElement("div");
+        container.classList.add("reveived-file-container");
+        const icon = document.createElement("span");
+        icon.innerHTML = "💾"; // Document icon
+        icon.style.marginRight = "10px";
+        icon.style.fontSize = "20px";
+
         const link = document.createElement("a");
         link.href = data.file;
         link.download = data.fileName;
-        link.textContent = "Download " + data.fileName;
-        appendChatElement(link, "received");
+        link.textContent = data.fileName;
+        link.style.fontWeight = "bold";
+
+        container.appendChild(icon);
+        container.appendChild(link);
+        appendChatElement(container, "received");
       }
       return;
     }
@@ -260,7 +275,6 @@ async function sendMessage() {
     logMessage("Connection not open yet.", "system");
   }
 }
-
 // Send a file (or image).
 function sendFile() {
   const fileInput = document.getElementById("fileInput");
@@ -284,11 +298,23 @@ function sendFile() {
         img.classList.add("sent-file");
         appendChatElement(img, "sent");
       } else {
+        const container = document.createElement("div");
+        container.classList.add("sent-file-container");
+        
+        const icon = document.createElement("span");
+        icon.innerHTML = "💾"; // Document icon
+        icon.style.marginRight = "10px";
+        icon.style.fontSize = "20px";
+        
         const link = document.createElement("a");
         link.href = fileData;
         link.download = file.name;
         link.textContent = file.name;
-        appendChatElement(link, "sent");
+        link.style.fontWeight = "bold";
+        
+        container.appendChild(icon);
+        container.appendChild(link);
+        appendChatElement(container, "sent");
       }
     } else {
       logMessage("Connection not open yet.", "system");
@@ -341,7 +367,6 @@ function endVideoCall() {
     document.getElementById("startCallButton").style.display = "block"; // Show Start Call button
   }
 }
-
 // Set up a video call.
 function setupCall(call) {
   currentCall = call;
@@ -396,12 +421,9 @@ document.getElementById("fileButton").addEventListener("click", function() {
 });
 // When a file is selected, send it automatically.
 document.getElementById("fileInput").addEventListener("change", sendFile);
-
 document.getElementById("startCallButton").addEventListener("click", startVideoCall);
 document.getElementById("endCallButton").addEventListener("click", endVideoCall);
-
 document.getElementById("disconnectButton").addEventListener("click", disconnect);
-
 document.getElementById("shareScreenButton").addEventListener("click", startScreenShare);
 document.getElementById("endScreenShareButton").addEventListener("click", endScreenShare);
 
