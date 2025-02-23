@@ -211,6 +211,11 @@ function setupConnection() {
     logMessage("Chat connection established.", "system");
   });
   conn.on('data', async function(data) {
+    if (data.type === "call-ended") {
+      logMessage("The other peer ended the video call.", "system");
+      document.getElementById("remoteVideo").srcObject = null;
+      document.getElementById("remoteVideo").style.display = "none"; // Hide remote video
+    }
     // If data is an object with a file property, treat it as a file message.
     if (typeof data === "object" && data.file) {
       if (data.fileType && data.fileType.startsWith("image/")) {
@@ -230,7 +235,6 @@ function setupConnection() {
     }
     const decryptedMessage = await decryptMessage(data);
     // Otherwise, handle as a text message.
-
     logMessage(decryptedMessage, "received");
   });
   conn.on('error', function(err) {
@@ -320,6 +324,9 @@ async function startVideoCall() {
 // Stop a video call.
 function endVideoCall() {
   if (currentCall) {
+    if (conn && conn.open) {
+      conn.send({ type: "call-ended" }); // Notify the other peer
+    }
     currentCall.close();
     currentCall = null;
   }
@@ -341,10 +348,15 @@ function setupCall(call) {
   
   call.on('stream', function(remoteStream) {
     document.getElementById("remoteVideo").srcObject = remoteStream;
+    document.getElementById("remoteVideo").style.display = "block"; // Ensure visibility
+    // adjustVideoLayout(true);
   });
   
   call.on('close', function() {
     logMessage("Video call ended.", "system");
+    document.getElementById("localVideo").srcObject = null;
+    document.getElementById("localVideo").style.display = "none"; // Hide remote video
+    // adjustVideoLayout(false);
     currentCall = null;
   });
   
